@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
         EmployeeController ec = new EmployeeController();
 
-        ec.registryEmployeeData(1,"BBB");
+        ec.registryEmployeeData(1,"AAA");
     }
 }
 
@@ -39,14 +39,13 @@ class EmployeeService{
     }
 
     public boolean validateEmployeeData(int inputId, String inputName){
-        boolean Isvalitation = false;
-        int idLen = String.valueOf(inputId).length();  
+        boolean Isvalitation = false; 
 
-        if (idLen == 4 && !inputName.isEmpty()){
+        if (inputId != 0 && !inputName.isEmpty()){
             System.out.println("空文字チェック合格");
             Isvalitation = true;
-        } else if (idLen == 0) {
-            System.out.println("IDが空文字になっています。");
+        } else if (inputId == 0) {
+            System.out.println("IDが空文字になっているか、0より大きい数字を設定してください");
         } else if (inputName.isEmpty()) {
             System.out.println("名前が空文字になっています。");
         }
@@ -76,7 +75,7 @@ class EmployeeRepository{
 
     public Employee searchEmployeeData(int targetId){
         //仮のEmployee型のデータを作ってます
-        Employee ed = new Employee(0,"AAA");
+        Employee ed = new Employee(2,"BBB");
         return ed;
     }
 }
