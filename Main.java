@@ -21,10 +21,9 @@ class Employee{
 }
 
 class EmployeeController{
+    EmployeeService es = new EmployeeService();
+
     public void registryEmployeeData(int inputId, String inputName){
-        //ここはstaticにすべきか、それともnewで呼び出しちゃっていいのか
-        //メソッドを呼び出す時点で、validateEmployeeDataが使える状態でないといけない
-        EmployeeService es = new EmployeeService();
         es.registryEmployeeData(inputId, inputName);
     }
 }
@@ -48,7 +47,7 @@ class EmployeeService{
     public boolean validateEmployeeData(int inputId, String inputName){
         boolean Isvalitation = false;
 
-        if (inputId != 0 || inputName.isEmpty()){
+        if (inputId > 0 && !inputName.isEmpty()){
             System.out.println("空文字チェック合格");
             Isvalitation = true;
         } else {
