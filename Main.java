@@ -1,7 +1,3 @@
-// import java.io.FileWriter;
-// import java.io.PrintWriter;
-// import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) {
         EmployeeController ec = new EmployeeController();
@@ -34,8 +30,6 @@ class EmployeeService{
     public void registryEmployeeData(int inputId, String inputName){
         if (validateEmployeeData(inputId, inputName) && checkDuplicationData(inputId)){
             er.registryEmployeeData(inputId, inputName);
-        } else {
-            System.out.println("エラーだけどエラー機能は作り途中");
         }
     }
 
@@ -46,12 +40,15 @@ class EmployeeService{
 
     public boolean validateEmployeeData(int inputId, String inputName){
         boolean Isvalitation = false;
+        int idLen = String.valueOf(inputId).length();  
 
-        if (inputId > 0 && !inputName.isEmpty()){
+        if (idLen == 4 && !inputName.isEmpty()){
             System.out.println("空文字チェック合格");
             Isvalitation = true;
-        } else {
-            System.out.println("IDか名前が空文字になっているようです。");
+        } else if (idLen == 0) {
+            System.out.println("IDが空文字になっています。");
+        } else if (inputName.isEmpty()) {
+            System.out.println("名前が空文字になっています。");
         }
 
         return Isvalitation;
@@ -64,7 +61,6 @@ class EmployeeService{
         if (inputId != targetED.employeeId){
             System.out.println("文字重複チェック合格");
             IsDuplication = true;
-
         } else {
             System.out.println("同じIDの社員が既に登録されています");
         }
@@ -75,7 +71,7 @@ class EmployeeService{
 
 class EmployeeRepository{
     public void registryEmployeeData(int inputId, String inputName){
-        System.out.println(inputId + " " + inputName);
+        System.out.println("登録完了 ID: " + inputId + ",名前: " + inputName);
     }
 
     public Employee searchEmployeeData(int targetId){
