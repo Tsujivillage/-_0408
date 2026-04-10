@@ -1,3 +1,5 @@
+import java.sql.*;
+
 public class Main {
     public static void main(String[] args) {
         EmployeeController ec = new EmployeeController();
@@ -7,12 +9,16 @@ public class Main {
 }
 
 class Employee{
-    public int employeeId;
-    public String employeeName;
+    private int employeeId;
+    private String employeeName;
 
     Employee(int employeeId, String employeeName){
         this.employeeId = employeeId;
         this.employeeName = employeeName;
+    }
+
+    public Employee getEmployee(){
+        return 
     }
 }
 
@@ -53,12 +59,11 @@ class EmployeeService{
         return Isvalitation;
     }
 
-    private boolean checkDuplicationData(int inputId){
-        Employee targetED = searchEmployeeData(inputId);
+    public boolean checkDuplicationData(int inputId){
         boolean IsDuplication = false;
+        Employee targetED = er.searchEmployeeData(inputId);
 
-        if (inputId != targetED.employeeId){
-            System.out.println("文字重複チェック合格");
+        if (inputId != targetED.getEmployeeId(targetED)){
             IsDuplication = true;
         } else {
             System.out.println("同じIDの社員が既に登録されています");
@@ -69,13 +74,42 @@ class EmployeeService{
 }
 
 class EmployeeRepository{
+    private String url = "jdbc:mysql://127.0.0.1:3306/ems2604";
+    private String user = "root";
+    private String password = "my-secret-pw";
+    private String sql;
+    private Employee employeeSearchResult;
+  
+    public Employee getEmployeeSearchResult(Employee employeeSearchResult){
+        return employeeSearchResult;
+    }
+
     public void registryEmployeeData(int inputId, String inputName){
         System.out.println("登録完了 ID: " + inputId + ",名前: " + inputName);
     }
 
     public Employee searchEmployeeData(int targetId){
-        //仮のEmployee型のデータを作ってます
-        Employee ed = new Employee(2,"BBB");
-        return ed;
+        sql = "SELECT * FROM practice WHERE id = " + targetId;
+
+        try (
+            Connection conn = DriverManager.getConnection(url, user, password);
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
+
+            while(rs.next()){
+                int resultId = rs.getInt("id");
+                String resultName = rs.getString("name");
+
+                employeeSearchResult = new Employee(resultId, resultName);
+            }
+
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return getEmployeeSearchResult(employeeSearchResult);
     }
 }
