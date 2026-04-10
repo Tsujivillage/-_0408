@@ -13,9 +13,17 @@ public class sqlTest {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()
         ) {
-            if (rs.next()) {
-                System.out.println("SQL実行成功: " + rs.getInt(1));
+
+            while(rs.next()){
+                int employeeId = rs.getInt("id");
+                String employeeName = rs.getString("name");
+
+                System.out.println("社員ID: " + employeeId);
+                System.out.println("社員名: " + employeeName);
             }
+
+            rs.close();
+            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
