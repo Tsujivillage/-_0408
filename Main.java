@@ -17,8 +17,8 @@ class Employee{
         this.employeeName = employeeName;
     }
 
-    public Employee getEmployee(){
-        return 
+    public int getEmployeeId(){
+        return this.employeeId;
     }
 }
 
@@ -39,11 +39,6 @@ class EmployeeService{
         }
     }
 
-    public Employee searchEmployeeData(int targetId){
-        Employee searchedED = er.searchEmployeeData(targetId);
-        return searchedED;
-    }
-
     public boolean validateEmployeeData(int inputId, String inputName){
         boolean Isvalitation = false; 
 
@@ -60,16 +55,16 @@ class EmployeeService{
     }
 
     public boolean checkDuplicationData(int inputId){
-        boolean IsDuplication = false;
-        Employee targetED = er.searchEmployeeData(inputId);
+        boolean IsUniqueId = false;
+        Integer targetED = er.searchEmployeeDataById(inputId);
 
-        if (inputId != targetED.getEmployeeId(targetED)){
-            IsDuplication = true;
+        if (inputId != targetED || targetED == null){
+            IsUniqueId = true;
         } else {
             System.out.println("同じIDの社員が既に登録されています");
         }
         
-        return IsDuplication;
+        return IsUniqueId;
     }
 }
 
@@ -78,17 +73,13 @@ class EmployeeRepository{
     private String user = "root";
     private String password = "my-secret-pw";
     private String sql;
-    private Employee employeeSearchResult;
-  
-    public Employee getEmployeeSearchResult(Employee employeeSearchResult){
-        return employeeSearchResult;
-    }
+    private int resultId;
 
     public void registryEmployeeData(int inputId, String inputName){
         System.out.println("登録完了 ID: " + inputId + ",名前: " + inputName);
     }
 
-    public Employee searchEmployeeData(int targetId){
+    public int searchEmployeeDataById(int targetId){
         sql = "SELECT * FROM practice WHERE id = " + targetId;
 
         try (
@@ -97,19 +88,14 @@ class EmployeeRepository{
             ResultSet rs = ps.executeQuery()
         ) {
 
-            while(rs.next()){
-                int resultId = rs.getInt("id");
-                String resultName = rs.getString("name");
-
-                employeeSearchResult = new Employee(resultId, resultName);
-            }
-
+            resultId = rs.getInt("id");
+        
             rs.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return getEmployeeSearchResult(employeeSearchResult);
+        return resultId;
     }
 }
